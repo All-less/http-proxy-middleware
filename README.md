@@ -145,10 +145,10 @@ The [RFC 3986 `path`](https://tools.ietf.org/html/rfc3986#section-3.3) is be use
     - `proxy('/api', {...})` - matches paths starting with `/api`
 
 * **multiple path matching**
-    - `proxy(['/api', '/ajax', '/someotherpath'], {...})` 
+    - `proxy(['/api', '/ajax', '/someotherpath'], {...})`
 
 * **wildcard path matching**
-    
+
     For fine-grained control you can use wildcard matching. Glob pattern matching is done by _micromatch_. Visit [micromatch](https://www.npmjs.com/package/micromatch) or [glob](https://www.npmjs.com/package/glob) for more globbing examples.
     - `proxy('**', {...})` matches any path, all requests will be proxied.
     - `proxy('**/*.html', {...})` matches any path which ends with `.html`
@@ -156,9 +156,10 @@ The [RFC 3986 `path`](https://tools.ietf.org/html/rfc3986#section-3.3) is be use
     - `proxy('/api/**/*.html', {...})` matches requests ending with `.html` in the path of `/api`
     - `proxy(['/api/**', '/ajax/**'], {...})` combine multiple patterns
     - `proxy(['/api/**', '!**/bad.json'], {...})` exclusion
+    **Note**: In multiple path matching, you cannot use string paths and wildcard paths together.
 
 * **custom matching**
-    
+
     For full control you can provide a custom function to determine which requests should be proxied or not.
     ```javascript
     /**
@@ -179,10 +180,10 @@ The [RFC 3986 `path`](https://tools.ietf.org/html/rfc3986#section-3.3) is be use
     ```javascript
     // rewrite path
     pathRewrite: {'^/old/api' : '/new/api'}
-    
+
     // remove path
     pathRewrite: {'^/remove/api' : ''}
-    
+
     // add base path
     pathRewrite: {'^/' : '/basepath/'}
 
@@ -315,7 +316,7 @@ The following options are provided by the underlying [http-proxy](https://github
 *  **option.cookieDomainRewrite**: rewrites domain of `set-cookie` headers. Possible values:
    * `false` (default): disable cookie rewriting
    * String: new domain, for example `cookieDomainRewrite: "new.domain"`. To remove the domain, use `cookieDomainRewrite: ""`.
-   * Object: mapping of domains to new domains, use `"*"` to match all domains.  
+   * Object: mapping of domains to new domains, use `"*"` to match all domains.
      For example keep one domain unchanged, rewrite one domain and remove other domains:
      ```
      cookieDomainRewrite: {
@@ -348,7 +349,7 @@ proxy('http://www.example.org:8000/api', {changeOrigin:true});
 
 ### app.use(path, proxy)
 
-If you want to use the server's `app.use` `path` parameter to match requests; 
+If you want to use the server's `app.use` `path` parameter to match requests;
 Create and mount the proxy without the http-proxy-middleware `context` parameter:
 ```javascript
 app.use('/api', proxy({target:'http://www.example.org', changeOrigin:true}));
